@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+<title>가나디야 KB 검수 패킷</title>
+<style>
+  :root {
+    --green: #1D6F5C;
+    --green-deep: #12564A;
+    --green-soft: #E9F3EE;
+    --green-border: #C6DED3;
+    --canvas: #FFFFFF;
+    --card: #FFFFFF;
+    --field: #F5F8F6;
+    --ink: #16211C;
+    --muted: #566159;
+    --line: #E0E5E2;
+    --amber: #9C5A02;
+    --amber-soft: #FBF1E3;
+    --amber-border: #EBD9BC;
+    --danger: #B3261E;
+    --danger-soft: #F9E9E7;
+    --focus: #2E8B74;
+    --on-accent: #FFFFFF;
+    --shadow: 0 1px 2px rgba(18,54,42,0.04), 0 2px 8px rgba(18,54,42,0.05);
+  }
+  /* 흰 배경 단일 테마로 의도적으로 고정 — 인쇄·서면 성격의 검수 문서 */
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', sans-serif;
+    background: var(--canvas); color: var(--ink);
+    font-size: 15px; line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 20px 16px 96px; }
+  section {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow);
+  }
+  h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.3; text-wrap: balance; }
+  h2 { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 10px; }
+  h3 { font-size: 14.5px; font-weight: 700; margin: 16px 0 6px; }
+  p { margin-bottom: 8px; }
+  .eyebrow {
+    font-size: 11px; font-weight: 800; letter-spacing: 1.8px; color: var(--green);
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  .xs { font-size: 12px; }
+  b { font-weight: 700; }
+  .mono { font-family: 'SF Mono', Menlo, monospace; font-size: 0.92em; }
+
+  /* ── 상단 고정 툴바 ── */
+  .toolbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.94); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line); padding: 10px 16px;
+  }
+  .toolbar-inner {
+    max-width: 760px; margin: 0 auto;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .progress-pill {
+    background: var(--green-soft); border: 1px solid var(--green-border); color: var(--green-deep);
+    border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 700; white-space: nowrap;
+  }
+  .save-state { font-size: 12px; color: var(--muted); flex: 1; min-width: 90px; }
+  .toolbar button {
+    font: inherit; font-size: 13px; font-weight: 700;
+    border-radius: 9px; padding: 7px 12px; cursor: pointer;
+    border: 1px solid var(--green); background: transparent; color: var(--green);
+  }
+  .toolbar button.primary { background: var(--green); color: var(--on-accent); }
+  .toolbar button:focus-visible, input:focus-visible, textarea:focus-visible, .seg label:focus-within {
+    outline: 2px solid var(--focus); outline-offset: 2px;
+  }
+
+  /* ── 표 ── */
+  .tbl-wrap { overflow-x: auto; margin: 8px 0 4px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; font-size: 13.5px; vertical-align: top; }
+  th { background: var(--green-soft); color: var(--ink); font-weight: 700; }
+  td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .quote {
+    border-left: 3px solid var(--green); background: var(--green-soft);
+    padding: 10px 14px; border-radius: 0 8px 8px 0;
+    font-size: 13.5px; line-height: 1.7; margin: 8px 0;
+  }
+  .callout {
+    background: var(--amber-soft); border: 1px solid var(--amber-border);
+    border-radius: 10px; padding: 12px 14px; margin: 10px 0; font-size: 13.5px;
+  }
+  .callout b:first-child { color: var(--amber); }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 10px 0 4px; }
+  .flow .step {
+    background: var(--green-soft); border: 1px solid var(--green-border); color: var(--green-deep);
+    border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 700;
+  }
+  .flow .arr { color: var(--muted); font-size: 12px; }
+
+  /* ── 규칙 카드 ── */
+  .rule-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .rule-id {
+    background: var(--green); color: var(--on-accent); font-weight: 800; font-size: 14px;
+    border-radius: 8px; padding: 3px 11px; letter-spacing: 0.4px;
+  }
+  .rule-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+  .tag { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+  .tag-severe { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-border); }
+  .tag-priority { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger-soft); }
+  .kv { display: grid; grid-template-columns: 108px 1fr; border-top: 1px solid var(--line); }
+  .kv > div { padding: 7px 10px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .kv > div:nth-child(odd) { background: var(--green-soft); font-weight: 700; font-size: 12.5px; }
+  details { margin: 8px 0; }
+  summary { cursor: pointer; font-size: 13px; font-weight: 700; color: var(--green-deep); }
+  details .xs { margin-top: 6px; line-height: 1.7; }
+  .src { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; padding-left: 18px; }
+  .src li { margin-bottom: 3px; }
+
+  /* ── 판정 컨트롤 ── */
+  .verdict {
+    border: 1.5px solid var(--green); border-radius: 12px;
+    padding: 14px; margin-top: 14px; background: var(--card);
+  }
+  .verdict-label { font-size: 12px; font-weight: 800; letter-spacing: 1px; color: var(--green-deep); margin-bottom: 8px; }
+  .seg { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg label {
+    display: flex; align-items: center; gap: 7px;
+    border: 1.5px solid var(--line); border-radius: 10px;
+    padding: 8px 14px; cursor: pointer; font-weight: 700; font-size: 14px;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  @media (prefers-reduced-motion: reduce) { .seg label { transition: none; } }
+  .seg input { accent-color: var(--green); width: 16px; height: 16px; }
+  .seg label:has(input:checked) { border-color: var(--green); background: var(--green-soft); }
+  .fix-fields { display: none; margin-top: 10px; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13.5px; }
+  .fix-fields.show { display: flex; }
+  .fix-fields input[type="text"] {
+    width: 84px; font: inherit; font-size: 14px; text-align: center;
+    border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px;
+    background: var(--field); color: var(--ink);
+  }
+  textarea, input.wide {
+    width: 100%; font: inherit; font-size: 14px;
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    background: var(--field); color: var(--ink); resize: vertical;
+  }
+  textarea { min-height: 64px; margin-top: 10px; }
+  textarea::placeholder, input::placeholder { color: var(--muted); opacity: 0.75; }
+
+  /* ── 출처 리스트 ── */
+  .source-row {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+  }
+  .source-row:last-of-type { border-bottom: none; }
+  .source-info { flex: 1; min-width: 240px; }
+  .source-name { font-weight: 700; font-size: 13.5px; }
+  .source-use { font-size: 12.5px; color: var(--muted); }
+  .source-row .seg label { padding: 5px 11px; font-size: 12.5px; border-radius: 8px; }
+
+  /* ── 확인서 ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .form-grid label { display: block; font-size: 12.5px; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
+  @media (max-width: 540px) { .form-grid { grid-template-columns: 1fr; } }
+  .confirm-check {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--green-soft); border: 1px solid var(--green-border);
+    border-radius: 10px; padding: 12px 14px; margin-top: 14px; font-size: 14px; font-weight: 700;
+  }
+  .confirm-check input { accent-color: var(--green); width: 18px; height: 18px; margin-top: 2px; }
+  .done-banner {
+    display: none; margin-top: 12px; border-radius: 10px; padding: 12px 14px;
+    background: var(--green-soft); border: 1px solid var(--green-border);
+    color: var(--green-deep); font-weight: 700; font-size: 14px;
+  }
+  .done-banner.show { display: block; }
+  .notice { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  @media print {
+    .toolbar { display: none; }
+    body { background: #fff; }
+    section { box-shadow: none; break-inside: avoid; }
+    textarea, input { background: #fff; }
+    details { display: none; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="toolbar" role="toolbar" aria-label="검수 진행 도구">
+  <div class="toolbar-inner">
+    <span class="progress-pill" id="progress">판정 0 / 9</span>
+    <span class="save-state" id="saveState">입력하면 이 브라우저에 자동 저장됩니다</span>
+    <button type="button" class="primary" id="btnMail">검수 결과 메일로 보내기</button>
+    <button type="button" id="btnCopy">결과 복사</button>
+    <button type="button" id="btnPrint">인쇄</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ══ 표지 ══ -->
+<section>
+  <div class="eyebrow">Ganadiya · Veterinary Review</div>
+  <h1>가나디야 지식베이스(KB) v1<br/>수의사 검수 패킷</h1>
+  <p class="small muted" style="margin-top:8px">버전 v1 (검수 전 초안, reviewed = false) · 작성일 2026-07-18</p>
+  <div class="callout">
+    <b>⚠ 수의사 검수 전 초안입니다.</b> 이 문서의 규칙·임계값은 1차 수의영양학 문헌을 근거로 정리한
+    초안이며, 아직 수의사의 검수를 받지 않았습니다. 실제 서비스 반영 전 반드시 수의영양 전문가의
+    확인을 거칩니다 — 이 문서가 그 절차입니다. <b>화면에서 바로 체크·기입하실 수 있고, 내용은 이
+    브라우저에 자동 저장됩니다.</b> 마치신 뒤 상단의 "결과 요약 복사"로 보내 주시면 됩니다.
+  </div>
+</section>
+
+<!-- ══ 사업 소개 ══ -->
+<section>
+  <div class="eyebrow">About</div>
+  <h2>가나디야는 어떤 서비스인가</h2>
+  <p>가나디야는 <b>알러지·건강 상태가 있는 반려견을 위한 맞춤 화식(자연식) 추천·정기배송 서비스</b>입니다.
+  보호자가 아이의 상태(알러지, 병력, 체중 등)를 등록하면, 수의영양학 문헌을 참고해 만든
+  <b>지식베이스(KB) 규칙</b>이 화식 제품을 <b>적합 / 주의 / 제외</b>로 판별해 추천하고, 맞는 식단을
+  정기배송으로 꾸준히 공급합니다. 급여 후 반응(기호성·배변·피부)을 기록해 다음 추천에 참고하는
+  관찰 루프도 함께 제공합니다.</p>
+  <div class="flow" aria-label="서비스 흐름">
+    <span class="step">상태 등록</span><span class="arr">→</span>
+    <span class="step">문헌 기반 판별·추천</span><span class="arr">→</span>
+    <span class="step">화식 정기배송</span><span class="arr">→</span>
+    <span class="step">급여 반응 기록</span><span class="arr">→</span>
+    <span class="step">재추천</span>
+  </div>
+  <p class="small muted">서비스는 <b>진단·처방을 하지 않습니다</b>(사료관리법 준수). 중증 상태는 추천 대신
+  수의사 상담을 먼저 안내합니다. <b>이 판별에 쓰이는 KB 규칙 6개의 임계값·근거가 본 검수의 대상입니다.</b></p>
+
+  <h3>이 서비스가 하는 것 / 하지 않는 것</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th style="width:50%">하는 것</th><th>하지 않는 것</th></tr>
+    <tr><td>입력된 상태에 따라 제품의 <b>특정 영양소가 평소보다 높은지/낮은지 관찰·안내</b></td><td>질병의 <b>진단·치료·예방</b> (표방 금지)</td></tr>
+    <tr><td>기능 언어로만 안내 — 예: "지방 함량 확인이 필요한 프로파일이에요"</td><td>병명·효능·완치·처방 표현</td></tr>
+    <tr><td>중증·위험신호는 추천 대신 <b>수의사 상담 연계</b></td><td>원료를 질환 근거로 일괄 배제 (회피 원료는 보호자 입력에서만)</td></tr>
+  </table></div>
+</section>
+
+<!-- ══ 검수 안내 ══ -->
+<section>
+  <div class="eyebrow">Your Role</div>
+  <h2>검수자(원장님)의 역할</h2>
+  <p>이 검수는 완벽한 판정을 만드는 작업이 아닙니다. 검수자는 <b>"우리가 낸 답에서 잘못된 것을
+  지적해주는 전문가·자문역"</b>입니다. 각 규칙에 대해 셋 중 하나만 선택해 주시면 됩니다 —
+  <b>승인</b>(그대로 사용 가능) / <b>수정 필요</b>(수정값 기재) / <b>삭제 권고</b>(규칙 제외).</p>
+  <p class="small muted">검수 결과는 규칙의 <b>임계값(DM%)·방향·라벨</b>에 반영되고, 추천 엔진이
+  제품을 caution(주의)/exclude(제외)로 판정하는 기준이 됩니다.</p>
+
+  <h3>엔진이 규칙을 적용하는 방식</h3>
+  <p class="small">제품 영양소는 수분 포함 <b>as-fed(급여 상태)</b>%로 표기되어, 수분 제거
+  <b>DM(건물기준)</b>%로 환산한 뒤 임계값과 비교합니다. 임계값도 제품값도 모두 DM 기준이라 수분
+  함량 차이(화식 ↔ 건사료)에 흔들리지 않습니다.</p>
+  <div class="quote mono" style="text-align:center">DM% = as-fed% ÷ ( (100 − 수분%) / 100 )</div>
+  <p class="small">DM 환산값이 <b>exclude 임계 이상</b>이면 제외, 아니고 <b>caution 임계 이상</b>이면
+  주의, 둘 다 미만이면 적합입니다. 수치가 <b>없으면</b> 판정 불가로 보고 무조건 주의로 격상합니다
+  ("모르면 회피 유지"). 판정은 적합 → 주의 → 제외 <b>단방향 격상</b>만 가능합니다.</p>
+  <details>
+    <summary>DM 환산 예시 보기</summary>
+    <p class="xs">저지방 화식이 지방 as-fed 3% · 수분 75%라면 → 3 ÷ ((100−75)/100) = 3 ÷ 0.25 =
+    <b>12.0 DM%</b>. 췌장염 이력 규칙(caution ≥ 15 / exclude ≥ 25) 적용 시 12.0 &lt; 15 → <b>적합</b>.
+    (라벨의 3%가 아니라 환산한 12%를 임계값과 비교합니다.)</p>
+  </details>
+  <div class="callout">
+    <b>vet-first 게이트:</b> 프로필에 <b>신장·심장·간·당뇨</b>(중증 4종) 조건이 있으면 엔진은 추천 목록을
+    내지 않고 수의사 상담 안내로 라우팅합니다. 아래 R-4·R-5·R-6은 현재 이 게이트 뒤에 있어, 임계값이
+    바로 쓰이기보다 게이트가 풀리거나 정책이 바뀔 때를 대비한 규칙입니다. 그래도 값의 임상 타당성
+    확인이 필요합니다.
+  </div>
+</section>
+
+<!-- ══ R-1 ══ -->
+<section data-rule="r1">
+  <div class="rule-head"><span class="rule-id">R-1</span><span class="rule-title">췌장염 이력 → 지방 주의</span></div>
+  <div class="kv">
+    <div>트리거</div><div>보호자 입력 '췌장염 이력' <span class="mono xs">(pancreatitis_history)</span></div>
+    <div>영양소/방향</div><div>지방(fat) / <b>초과 시 주의</b> (표준 방향)</div>
+    <div>임계값 (DM%)</div><div>caution <b>≥ 15</b> / exclude <b>≥ 25</b></div>
+    <div>화면 문구</div><div>"지방 함량 확인이 필요한 프로파일이에요" <span class="muted">(질환명 비노출)</span></div>
+  </div>
+  <div class="quote">개 췌장염의 급성기~회복기 표준 관리는 저지방 위장관식이며, 여러 1차 자료가 "저지방식"을
+  대사에너지의 20% 미만(약 8~10% DM 근사) 또는 20 g fat/1,000 kcal 미만으로 정의한다. 다만 재발 방지 목적의
+  저지방식 효과에 대한 확립된 임상시험 근거는 아직 없다(Cridge 2022: "definitive conclusions … cannot be made").
+  따라서 치료식만큼 엄격한 8~10% DM이 아니라, "이력 있는 개는 고지방 제품을 피하도록 안내하는" 보수적 관찰
+  임계값(caution 15 / exclude 25% DM)으로 완화해 제시한다.</div>
+  <ul class="src">
+    <li>출처: Cridge H, et al. <i>JVIM</i> 2022 (PMC9151489) · Merck Veterinary Manual 'Pancreatitis in Dogs and Cats'</li>
+    <li>신뢰수준: 확립된 임상시험 근거 없음 — 치료식(8~10% DM)에서 완화한 '보수적 관찰 임계값'</li>
+  </ul>
+  <div class="verdict">
+    <div class="verdict-label">판정</div>
+    <div class="seg" data-verdict="r1">
+      <label><input type="radio" name="r1" value="approve"/>승인</label>
+      <label><input type="radio" name="r1" value="fix"/>수정 필요</label>
+      <label><input type="radio" name="r1" value="delete"/>삭제 권고</label>
+    </div>
+    <div class="fix-fields" data-fix="r1">
+      수정값: caution <input type="text" data-k="r1_caution" inputmode="decimal"/> %DM /
+      exclude <input type="text" data-k="r1_exclude" inputmode="decimal"/> %DM
+    </div>
+    <textarea data-k="r1_opinion" placeholder="의견 (선택)"></textarea>
+  </div>
+</section>
+
+<!-- ══ R-2 ══ -->
+<section data-rule="r2">
+  <div class="rule-head"><span class="rule-id">R-2</span><span class="rule-title">예민한 소화기 → 지방 주의</span></div>
+  <div class="kv">
+    <div>트리거</div><div>보호자 입력 '예민한 소화기' <span class="mono xs">(sensitive_gi)</span></div>
+    <div>영양소/방향</div><div>지방(fat) / <b>초과 시 주의</b></div>
+    <div>임계값 (DM%)</div><div>caution <b>≥ 20</b> / exclude <b>≥ 30</b></div>
+    <div>화면 문구</div><div>"지방 함량 확인이 필요한 프로파일이에요"</div>
+  </div>
+  <div class="quote">만성 장병증에서 고지방식은 설사·증상 악화와 연관되며, 표준 관리는 "저~중등도 지방 +
+  고소화율(전체 80%↑, 주요 거대영양소 90%↑)" 식이다. 특히 단백질소실장병증(PLE)에서는 저지방식이 핵심 치료로,
+  코호트 연구에서 low-fat을 17~30 g/Mcal(약 7~12% DM 근사), ultra-low-fat을 &lt;17 g/Mcal로 정의했다. 일반
+  "예민한 소화"는 PLE만큼 엄격할 필요가 없어 caution 20 / exclude 30% DM로 보수적으로 제시한다(PLE 등 중증은
+  &lt;12% DM 수준 필요를 문구로 안내 권장).</div>
+  <ul class="src">
+    <li>출처: Merck 'Chronic Enteropathies in Small Animals' · Rudinsky AJ, et al. <i>JAVMA</i> 2018;253(5) · Margrey C, et al. <i>JVIM</i> 2025;39(5) (PLE 코호트)</li>
+    <li>신뢰수준: PLE(중증) 기준(&lt;12% DM)을 완화한 '보수적' 임계값</li>
+  </ul>
+  <div class="verdict">
+    <div class="verdict-label">판정</div>
+    <div class="seg" data-verdict="r2">
+      <label><input type="radio" name="r2" value="approve"/>승인</label>
+      <label><input type="radio" name="r2" value="fix"/>수정 필요</label>
+      <label><input type="radio" name="r2" value="delete"/>삭제 권고</label>
+    </div>
+    <div class="fix-fields" data-fix="r2">
+      수정값: caution <input type="text" data-k="r2_caution" inputmode="decimal"/> %DM /
+      exclude <input type="text" data-k="r2_exclude" inputmode="decimal"/> %DM
+    </div>
+    <textarea data-k="r2_opinion" placeholder="의견 (선택)"></textarea>
+  </div>
+</section>
+
+<!-- ══ R-3 ══ -->
+<section data-rule="r3">
+  <div class="rule-head"><span class="rule-id">R-3</span><span class="rule-title">과체중 → 지방 주의</span></div>
+  <div class="kv">
+    <div>트리거</div><div>보호자 입력 '과체중' <span class="mono xs">(overweight)</span></div>
+    <div>영양소/방향</div><div>지방(fat) / <b>초과 시 주의</b></div>
+    <div>임계값 (DM%)</div><div>caution <b>≥ 15</b> / exclude <b>≥ 25</b></div>
+    <div>화면 문구</div><div>"지방 함량 확인이 필요한 프로파일이에요"</div>
+  </div>
+  <div class="quote">비만견 저열량 식이 메타분석에서 지방(ether extract) &lt; 10% DM + 고단백(&gt; 25% DM) +
+  고섬유(&gt; 12% DM) 조합이 체중감량과 제지방량(근육) 보존에 가장 유리했다. 저지방 규칙은 표준 방향이며
+  evidence-optimal은 &lt;10% DM이나, 과도한 flag를 피하려 보수적으로 caution 15 / exclude 25% DM로 제시한다.
+  단백질 규칙은 방향이 반대로, 근육 보존을 위해 단백질이 25% DM보다 낮은 제품을 주의하도록 안내한다.</div>
+  <ul class="src">
+    <li>출처: Vanelli K, et al. 비만견 저열량 식이 메타분석. <i>Animals</i> 2025 (PMC11759159)</li>
+    <li>신뢰수준: 근거 최적치(&lt;10% DM)에서 완화한 '보수적' 임계값</li>
+  </ul>
+  <div class="callout"><b>⚠ 함께 확인 — 미반영 규칙:</b> 같은 메타분석은 <b>단백질 규칙(방향 반대)</b>도
+  제시합니다 — "protein DM% &lt; 25일 때 주의"(근육 보존 목적, exclude 없음). 근거 문서에는 있으나
+  <b>현재 규칙 시드에는 미반영</b>입니다. 포함 여부와 방향(낮을수록 주의)이 맞는지 확인이 필요합니다.</div>
+  <div class="verdict">
+    <div class="verdict-label">판정 (지방 규칙)</div>
+    <div class="seg" data-verdict="r3">
+      <label><input type="radio" name="r3" value="approve"/>승인</label>
+      <label><input type="radio" name="r3" value="fix"/>수정 필요</label>
+      <label><input type="radio" name="r3" value="delete"/>삭제 권고</label>
+    </div>
+    <div class="fix-fields" data-fix="r3">
+      수정값: caution <input type="text" data-k="r3_caution" inputmode="decimal"/> %DM /
+      exclude <input type="text" data-k="r3_exclude" inputmode="decimal"/> %DM
+    </div>
+    <div class="verdict-label" style="margin-top:12px">추가 판정 — 단백질 방향-반대 규칙</div>
+    <div class="seg" data-verdict="r3p">
+      <label><input type="radio" name="r3p" value="include"/>포함</label>
+      <label><input type="radio" name="r3p" value="exclude"/>미포함 유지</label>
+      <label><input type="radio" name="r3p" value="other"/>기타</label>
+    </div>
+    <div class="fix-fields" data-fix="r3p">
+      caution 기준: protein DM% &lt; <input type="text" data-k="r3p_value" inputmode="decimal"/>
+    </div>
+    <textarea data-k="r3_opinion" placeholder="의견 (선택)"></textarea>
+  </div>
+</section>
+
+<!-- ══ R-4 ══ -->
+<section data-rule="r4">
+  <div class="rule-head"><span class="rule-id">R-4</span><span class="rule-title">신장 질환 → 인(P) 주의</span>
+    <span class="tag tag-priority">★ 최우선 검수</span><span class="tag tag-severe">중증 · vet-first</span></div>
+  <div class="kv">
+    <div>트리거</div><div>보호자 입력 '신장 질환 진단' <span class="mono xs">(renal)</span> — 실제로는 추천 전 수의사 상담으로 라우팅</div>
+    <div>영양소/방향</div><div>인(phosphorus) / <b>초과 시 주의</b></div>
+    <div>임계값 (DM%)</div><div>caution <b>≥ 0.5</b> / exclude <b>≥ 1.0</b> — <b style="color:var(--danger)">잠정 placeholder</b></div>
+    <div>화면 문구</div><div>"인 함량 확인이 필요한 프로파일이에요"</div>
+  </div>
+  <div class="quote">IRIS는 CKD 진행 억제를 위해 혈중 인 조절을 핵심 치료로 두며, 목표 상한을 stage 진행에 따라
+  완화한다(전반 &lt;4.6 mg/dL, stage 3 &lt;5.0, stage 4 &lt;6.0 mg/dL). 그러나 IRIS/Merck 원문은 이를 혈액
+  목표치로만 제시하고 "clinical renal diet를 급여하라"고 안내할 뿐 사료의 인 함량(%DM)을 수치화하지 않는다.
+  따라서 표의 값은 1차 문헌 직접 인용이 아니라 임상 통념(치료용 신장식 ≈ 0.2–0.5% DM P vs 유지식 ≈ 0.8–1.6%
+  DM P) 기반의 보수적 잠정 placeholder이며, 정식 서비스 전 수의사가 반드시 값을 확정해야 한다.</div>
+  <ul class="src">
+    <li>출처: IRIS 'Treatment Recommendations for CKD in Dogs' 2023 · Merck 'Renal Dysfunction in Dogs and Cats'</li>
+    <li>신뢰수준: <b>본 패킷에서 가장 우선적으로 확정이 필요한 값</b> (원문 단위는 혈장 mg/dL — 사료 %DM 아님)</li>
+    <li>함께 고지(반대 근거): 신장 규칙에 나트륨 제한은 <b>의도적으로 제외</b> — IRIS 2023 "there is no evidence that lowering dietary Na will reduce blood pressure"</li>
+  </ul>
+  <div class="verdict">
+    <div class="verdict-label">판정</div>
+    <div class="seg" data-verdict="r4">
+      <label><input type="radio" name="r4" value="approve"/>승인</label>
+      <label><input type="radio" name="r4" value="fix"/>수정 필요 (권장 확정값)</label>
+      <label><input type="radio" name="r4" value="delete"/>삭제 권고</label>
+    </div>
+    <div class="fix-fields" data-fix="r4">
+      확정값: caution <input type="text" data-k="r4_caution" inputmode="decimal"/> %DM /
+      exclude <input type="text" data-k="r4_exclude" inputmode="decimal"/> %DM
+    </div>
+    <textarea data-k="r4_opinion" placeholder="의견 — 값 산정 근거를 함께 적어 주시면 큰 도움이 됩니다"></textarea>
+  </div>
+</section>
+
+<!-- ══ R-5 ══ -->
+<section data-rule="r5">
+  <div class="rule-head"><span class="rule-id">R-5</span><span class="rule-title">심장 질환 → 나트륨 주의</span>
+    <span class="tag tag-severe">중증 · vet-first</span></div>
+  <div class="kv">
+    <div>트리거</div><div>보호자 입력 '심장 질환 진단' <span class="mono xs">(heart)</span> — 실제로는 추천 전 수의사 상담으로 라우팅</div>
+    <div>영양소/방향</div><div>나트륨(sodium) / <b>초과 시 주의</b></div>
+    <div>임계값 (DM%)</div><div>caution <b>≥ 0.3</b> / exclude <b>≥ 0.5</b> — <b>가정 환산값</b></div>
+    <div>화면 문구</div><div>"나트륨 함량 확인이 필요한 프로파일이에요"</div>
+  </div>
+  <div class="quote">Merck는 경증~중등도 심부전에서는 엄격한 제한이 불필요하고 고염 간식/사람 음식만 피하면 되며,
+  진행/불응 사례에서 중등도 제한 50–80 mg Na/100 kcal, 중증에서 적극 제한 &lt;50 mg/100 kcal을 "시도해볼 수
+  있다"고 기술한다. 변환 가정(100 kcal ≈ 25 g DM)으로 환산하면 중등도 ≈ 0.20–0.32% DM이므로, 관찰 임계값을
+  caution 0.3 / exclude 0.5% DM로 제시한다. ACVIM 2019는 방향성만 정성적으로 일치(정량 수치 없음).</div>
+  <ul class="src">
+    <li>출처: Merck 'Heart Failure in Dogs and Cats' (Kittleson 2023 review) · Keene BW, et al. ACVIM MMVD consensus. <i>JVIM</i> 2019;33(3)</li>
+    <li>신뢰수준: mg/100 kcal → <b>변환 가정(100 kcal ≈ 25 g DM)</b> 환산값</li>
+    <li>함께 고지(반대 근거): 심장 규칙에 단백질 제한은 <b>제외</b> — ACVIM 2019 "avoid low-protein diets … unless severe concurrent renal failure is present"</li>
+  </ul>
+  <div class="verdict">
+    <div class="verdict-label">판정</div>
+    <div class="seg" data-verdict="r5">
+      <label><input type="radio" name="r5" value="approve"/>승인</label>
+      <label><input type="radio" name="r5" value="fix"/>수정 필요</label>
+      <label><input type="radio" name="r5" value="delete"/>삭제 권고</label>
+    </div>
+    <div class="fix-fields" data-fix="r5">
+      수정값: caution <input type="text" data-k="r5_caution" inputmode="decimal"/> %DM /
+      exclude <input type="text" data-k="r5_exclude" inputmode="decimal"/> %DM
+    </div>
+    <textarea data-k="r5_opinion" placeholder="의견 (선택)"></textarea>
+  </div>
+</section>
+
+<!-- ══ R-6 ══ -->
+<section data-rule="r6">
+  <div class="rule-head"><span class="rule-id">R-6</span><span class="rule-title">당뇨 → 지방 주의 (연성·조건부)</span>
+    <span class="tag tag-severe">중증 · vet-first</span></div>
+  <div class="kv">
+    <div>트리거</div><div>보호자 입력 '당뇨 진단' <span class="mono xs">(diabetes)</span> — 실제로는 추천 전 수의사 상담으로 라우팅</div>
+    <div>영양소/방향</div><div>지방(fat) / <b>초과 시 주의</b></div>
+    <div>임계값 (DM%)</div><div>caution <b>≥ 20</b> / exclude <b>없음(null)</b> — 연성 규칙</div>
+    <div>화면 문구</div><div>"지방 함량 확인이 필요한 프로파일이에요"</div>
+  </div>
+  <div class="quote">AAHA 2018은 개 당뇨에서 특정 다량영양소 비율보다 매일 같은 사료·같은 시간·같은 양
+  (consistency)을 가장 중시한다. 다만 체중 최적화를 위한 "fat restriction"을 관리 요소로 명시하고, 췌장염이
+  흔한 병발질환이라 저지방이 유익할 수 있다고 본다. 개에 대한 정량 %DM은 원문에 없어, 췌장염 이력 규칙보다
+  완화된 연성 watch(caution 20% DM, exclude 없음)로 제시한다.</div>
+  <ul class="src">
+    <li>출처: AAHA '2018 Diabetes Management Guidelines' (Behrend et al., <i>JAAHA</i> 2018) · Merck 'Diabetes Mellitus in Dogs and Cats'</li>
+    <li>신뢰수준: '연성·조건부' 규칙 — 원문에 개 대상 정량 %DM 없음 → exclude 미설정</li>
+  </ul>
+  <div class="verdict">
+    <div class="verdict-label">판정</div>
+    <div class="seg" data-verdict="r6">
+      <label><input type="radio" name="r6" value="approve"/>승인</label>
+      <label><input type="radio" name="r6" value="fix"/>수정 필요</label>
+      <label><input type="radio" name="r6" value="delete"/>삭제 권고</label>
+    </div>
+    <div class="fix-fields" data-fix="r6">
+      수정값: caution <input type="text" data-k="r6_caution" inputmode="decimal"/> % / exclude 두기:
+      <input type="text" data-k="r6_exclude" inputmode="decimal"/> %
+    </div>
+    <textarea data-k="r6_opinion" placeholder="의견 (선택)"></textarea>
+  </div>
+</section>
+
+<!-- ══ 한계 ══ -->
+<section>
+  <div class="eyebrow">Known Limitations</div>
+  <h2>알려진 한계 · 우선 검수 항목</h2>
+  <div class="tbl-wrap"><table>
+    <tr><th style="width:34px">순위</th><th style="width:38%">항목</th><th>왜 중요한가</th></tr>
+    <tr><td class="r"><b>1</b></td><td><b>신장 인 임계값(0.5/1.0% DM) 확정</b></td><td>유일하게 1차 문헌이 사료 %DM을 제시하지 못해 placeholder로 남음. 값이 틀리면 신장 케이스 안내 전체가 어긋남.</td></tr>
+    <tr><td class="r"><b>2</b></td><td>DM% 환산 가정(4,000 kcal ME/kg DM)의 임상 타당성</td><td>심장·췌장염·소화기·당뇨 임계값이 모두 이 근사 변환에 의존.</td></tr>
+    <tr><td class="r"><b>3</b></td><td>과체중 단백질 방향-반대 규칙</td><td>유일하게 부등호가 반대. exclude=null(연성)이 맞는지도 확인.</td></tr>
+    <tr><td class="r"><b>4</b></td><td>원료 회피 규칙 0개 결론의 적정성</td><td>"질환별 회피 원료"를 넣지 않은 핵심 안전 결정 — 확인해 주시면 마케팅 요구에 대한 방어 근거가 됨.</td></tr>
+    <tr><td class="r"><b>5</b></td><td>노령견·간 규칙 0개의 타당성</td><td>"노령/간이니 단백질 제한"은 통념이나 문헌상 오히려 금기 — "일부러 뺐다"는 판단 확인 필요.</td></tr>
+  </table></div>
+  <details>
+    <summary>한계 상세 (A~D)</summary>
+    <p class="xs"><b>A — 신장 인 임계값은 잠정 placeholder.</b> IRIS 2023·Merck는 혈장 인 목표치(mg/dL)만 제시. 표의 값은 임상 통념(신장식 ≈ 0.2–0.5% DM P vs 유지식 ≈ 0.8–1.6% DM P) 기반 보수적 잠정치.</p>
+    <p class="xs"><b>B — 원료 회피 KB 규칙 0개.</b> 피부 트러블 방어 논리: (1) 진료견 중 food allergy 유병률 1–2%, (2) 피부염 중 비중 0–24%로 편차 큼, (3) 신뢰 진단은 8–12주 elimination diet + 재유발뿐, (4) Mueller/Olivry/Prélaud(2016)의 원료 순위(소 34%·유제품 17%·닭 15% …)는 확진견 중 비율이자 노출 편향이며 절대 금기가 아님. 앱의 회피 원료는 보호자/AI 입력에서만 생성.</p>
+    <p class="xs"><b>C — 과체중 단백질 규칙: 방향 반대 + exclude 보류.</b> caution 25% DM, 방향 반대(protein &lt; 25일 때 주의). 메타분석 최적치이지 하드 컷오프가 아니라 exclude 미설정. 현재 시드 미반영(R-3의 추가 판정란).</p>
+    <p class="xs"><b>D — DM% 환산 근사 가정.</b> 대사에너지 밀도 ≈ 4,000 kcal ME/kg DM(100 kcal ≈ 25 g DM), 지방 1 g ≈ 8.5 kcal. 결과값은 보수적 근사 변환값이며 정확한 수치가 아님 — 대표 제품 실측 재보정 권장.</p>
+  </details>
+</section>
+
+<!-- ══ 문구 정책 ══ -->
+<section>
+  <div class="eyebrow">Copy Policy</div>
+  <h2>문구 정책 (문구 관점 의견)</h2>
+  <p class="small">치료·예방·완치·처방·진단·병명·효능 표현은 <b>전면 금지</b>이며 릴리스 전 자동 스캔이
+  차단합니다. 모든 사용자 대면 문구는 단일 문구 사전에서만 생성되고, <b>추천 이유는 질환명을 절대 참조하지
+  않습니다</b>(신장 규칙도 화면엔 "인 함량 확인이 필요한 프로파일이에요"만 표기). 모든 관련 화면에
+  <b>"정확한 진단과 처방은 수의사와 상담하세요"</b>를 상시 병기하고, 위험 신호·중증 조건은 AI 출력과 무관하게
+  서버가 강제로 수의사 상담 우선으로 처리합니다.</p>
+  <div class="verdict">
+    <div class="verdict-label">판정</div>
+    <div class="seg" data-verdict="copy">
+      <label><input type="radio" name="copy" value="ok"/>문구 정책 적절</label>
+      <label><input type="radio" name="copy" value="fix"/>수정 의견 있음</label>
+    </div>
+    <textarea data-k="copy_opinion" placeholder="문구 관련 의견 (선택)"></textarea>
+  </div>
+</section>
+
+<!-- ══ 출처 적정성 ══ -->
+<section>
+  <div class="eyebrow">Sources</div>
+  <h2>참고 문헌·데이터셋 적정성</h2>
+  <p class="small muted">임계값과 별개로, <b>근거로 삼은 문헌·데이터셋 자체가 참조할 만한 출처인지</b> 확인을
+  부탁드립니다. 각 출처의 전체 서지·URL은 요청 시 원문 사본과 함께 제공합니다.</p>
+  <div id="sources"></div>
+  <div class="verdict">
+    <div class="verdict-label">출처 구성(1차 문헌 + 표준 매뉴얼) 전반</div>
+    <div class="seg" data-verdict="sources">
+      <label><input type="radio" name="sources" value="ok"/>근거 자료로 적절</label>
+      <label><input type="radio" name="sources" value="fix"/>보완 필요</label>
+    </div>
+    <textarea data-k="sources_opinion" placeholder="추가로 참조를 권하는 표준 자료 (예: NRC 2006, AAFCO, 한국 사료표준 등)"></textarea>
+  </div>
+</section>
+
+<!-- ══ 확인서 ══ -->
+<section>
+  <div class="eyebrow">Sign-off</div>
+  <h2>검수 확인</h2>
+  <div class="form-grid">
+    <div><label for="f-name">검수자 성명</label><input class="wide" id="f-name" data-k="name" type="text" autocomplete="name"/></div>
+    <div><label for="f-org">소속 (동물병원)</label><input class="wide" id="f-org" data-k="org" type="text" autocomplete="organization"/></div>
+    <div><label for="f-license">수의사 면허번호 (선택)</label><input class="wide" id="f-license" data-k="license" type="text"/></div>
+    <div><label for="f-date">검수일</label><input class="wide" id="f-date" data-k="date" type="date"/></div>
+    <div class="full"><label for="f-final">종합 의견 (신장 인 확정값 등)</label>
+      <textarea id="f-final" data-k="final_opinion" style="margin-top:0; min-height:88px"></textarea></div>
+  </div>
+  <label class="confirm-check">
+    <input type="checkbox" id="confirm" data-k="confirmed"/>
+    본인은 상기 규칙(R-1~R-6), DM% 환산 가정, 문구 정책, 참고 문헌을 검토하였으며 각 항목에 의견을 표기하였습니다.
+  </label>
+  <div class="done-banner" id="doneBanner">모든 판정이 완료되었습니다. 상단의 "검수 결과 메일로 보내기"를 눌러 보내 주세요. 감사합니다.</div>
+  <p class="notice">"검수 결과 메일로 보내기"를 누르면 작성 내용이 담긴 메일이 열립니다 — 검수자님이
+  <b>보내기 버튼을 눌러야 실제로 전송</b>됩니다(작성 중 내용은 이 브라우저에만 저장됩니다). 내용이 길어
+  메일에서 잘리면 "결과 복사"로 붙여넣어 보내 주셔도 됩니다. 서면 서명본이 필요하면 "인쇄"로 출력할 수 있습니다.</p>
+</section>
+
+<p class="xs muted" style="text-align:center; padding-bottom:8px">가나디야 (김남주) · KB v1 검수 패킷 · 원본 데이터: kb_rules.json / KB-RESEARCH.md</p>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var LS_KEY = 'ganadiya-kb-review-v1';
+
+  var SOURCES = [
+    ["IRIS, 'Treatment Recommendations for CKD in Dogs' (2023)", "R-4 신장 인 · 나트륨 규칙 제외 근거"],
+    ["Keene BW, et al. ACVIM MMVD consensus. JVIM (2019)", "R-5 심장 방향성 · 단백질 제한 제외 근거"],
+    ["Behrend E, et al. AAHA Diabetes Management Guidelines. JAAHA (2018)", "R-6 당뇨 연성 규칙"],
+    ["Cridge H, et al. 췌장염 병인 리뷰. JVIM (2022)", "R-1 췌장염 저지방 정의"],
+    ["Rudinsky AJ, et al. 만성 장병증 영양 관리. JAVMA (2018)", "R-2 소화기 저~중지방 기준"],
+    ["Margrey C, et al. PLE 58두 코호트. JVIM (2025)", "R-2 low-fat 정량 정의(g/Mcal)"],
+    ["Vanelli K, et al. 비만견 저열량 식이 메타분석. Animals (2025)", "R-3 과체중 지방·단백질 기준"],
+    ["Mueller RS, Olivry T, Prélaud P. 식이 알러젠 CAT. BMC Vet Res (2016)", "원료 회피 규칙 미채택 근거(노출 편향)"],
+    ["Webster CRL, et al. ACVIM 만성 간염 consensus. JVIM (2019)", "간 규칙 0개(단백질 제한 금기) 근거"],
+    ["FEDIAF SAB, 'Nutrition of senior dogs' (2017)", "노령견 규칙 0개 근거"],
+    ["WSAVA Nutritional Assessment Guidelines (2011)", "관절 등 보조 참조"],
+    ["Merck Veterinary Manual (췌장염·장병증·신장·심부전·간·당뇨·피부 항목)", "전 규칙 공통 참조(2차 매뉴얼)"]
+  ];
+
+  var srcWrap = document.getElementById('sources');
+  SOURCES.forEach(function (s, i) {
+    var row = document.createElement('div');
+    row.className = 'source-row';
+    row.innerHTML =
+      '<div class="source-info"><div class="source-name"></div><div class="source-use"></div></div>' +
+      '<div class="seg">' +
+      '<label><input type="radio" name="src' + i + '" value="ok"/>적절</label>' +
+      '<label><input type="radio" name="src' + i + '" value="bad"/>부적절·대체</label>' +
+      '</div>';
+    row.querySelector('.source-name').textContent = s[0];
+    row.querySelector('.source-use').textContent = s[1];
+    srcWrap.appendChild(row);
+  });
+
+  var saveState = document.getElementById('saveState');
+  var storageOk = true;
+  try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); }
+  catch (e) { storageOk = false; saveState.textContent = '이 환경은 자동 저장이 제한됩니다 — 한 번에 작성 후 "결과 요약 복사"를 눌러 주세요'; }
+
+  function collect() {
+    var data = {};
+    document.querySelectorAll('input[type=radio]:checked').forEach(function (el) { data[el.name] = el.value; });
+    document.querySelectorAll('[data-k]').forEach(function (el) {
+      if (el.type === 'checkbox') data[el.dataset.k] = el.checked;
+      else data[el.dataset.k] = el.value;
+    });
+    return data;
+  }
+
+  function restore() {
+    if (!storageOk) return;
+    var raw = null;
+    try { raw = localStorage.getItem(LS_KEY); } catch (e) { return; }
+    if (!raw) return;
+    var data;
+    try { data = JSON.parse(raw); } catch (e) { return; }
+    Object.keys(data).forEach(function (k) {
+      var radio = document.querySelector('input[type=radio][name="' + k + '"][value="' + data[k] + '"]');
+      if (radio) { radio.checked = true; return; }
+      var el = document.querySelector('[data-k="' + k + '"]');
+      if (!el) return;
+      if (el.type === 'checkbox') el.checked = !!data[k];
+      else el.value = data[k] || '';
+    });
+  }
+
+  var saveTimer = null;
+  function save() {
+    if (storageOk) {
+      try { localStorage.setItem(LS_KEY, JSON.stringify(collect())); } catch (e) {}
+      var t = new Date();
+      saveState.textContent = '자동 저장됨 ' + String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') + ':' + String(t.getSeconds()).padStart(2, '0');
+    }
+    refresh();
+  }
+  function queueSave() { clearTimeout(saveTimer); saveTimer = setTimeout(save, 250); }
+
+  var FIX_TRIGGER = { r1: 'fix', r2: 'fix', r3: 'fix', r3p: 'include', r4: 'fix', r5: 'fix', r6: 'fix' };
+  function refreshFixFields() {
+    Object.keys(FIX_TRIGGER).forEach(function (name) {
+      var box = document.querySelector('[data-fix="' + name + '"]');
+      if (!box) return;
+      var sel = document.querySelector('input[name="' + name + '"]:checked');
+      box.classList.toggle('show', !!sel && sel.value === FIX_TRIGGER[name]);
+    });
+  }
+
+  var PROGRESS_KEYS = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'copy', 'sources'];
+  function refresh() {
+    refreshFixFields();
+    var done = 0;
+    PROGRESS_KEYS.forEach(function (k) {
+      if (document.querySelector('input[name="' + k + '"]:checked')) done++;
+    });
+    if (document.getElementById('confirm').checked) done++;
+    document.getElementById('progress').textContent = '판정 ' + done + ' / 9';
+    document.getElementById('doneBanner').classList.toggle('show', done === 9);
+  }
+
+  var V_LABEL = { approve: '승인', fix: '수정 필요', delete: '삭제 권고', include: '포함', exclude: '미포함 유지', other: '기타', ok: '적절', bad: '부적절·대체' };
+  function summarize() {
+    var d = collect();
+    var L = [];
+    L.push('[가나디야 KB v1 수의사 검수 결과]');
+    L.push('검수자: ' + (d.name || '(미기재)') + (d.org ? ' / ' + d.org : '') + (d.license ? ' / 면허 ' + d.license : ''));
+    L.push('검수일: ' + (d.date || '(미기재)'));
+    L.push('');
+    var rules = [
+      ['r1', 'R-1 췌장염 이력→지방 (15/25)'],
+      ['r2', 'R-2 예민한 소화기→지방 (20/30)'],
+      ['r3', 'R-3 과체중→지방 (15/25)'],
+      ['r4', 'R-4 신장→인 (0.5/1.0, placeholder)'],
+      ['r5', 'R-5 심장→나트륨 (0.3/0.5)'],
+      ['r6', 'R-6 당뇨→지방 (20/-, 연성)']
+    ];
+    rules.forEach(function (r) {
+      var v = d[r[0]];
+      var line = r[1] + ': ' + (v ? (V_LABEL[v] || v) : '(미판정)');
+      if (v === 'fix') {
+        var c = d[r[0] + '_caution'], x = d[r[0] + '_exclude'];
+        if (c || x) line += ' → caution ' + (c || '?') + ' / exclude ' + (x || '?') + ' %DM';
+      }
+      var op = d[r[0] + '_opinion'];
+      if (op) line += ' | 의견: ' + op;
+      L.push(line);
+    });
+    var p = d.r3p;
+    if (p) L.push('R-3 추가(단백질 반대규칙): ' + (V_LABEL[p] || p) + (p === 'include' && d.r3p_value ? ' (protein DM% < ' + d.r3p_value + ')' : ''));
+    L.push('문구 정책: ' + (d.copy ? (d.copy === 'ok' ? '적절' : '수정 의견 있음') : '(미판정)') + (d.copy_opinion ? ' | ' + d.copy_opinion : ''));
+    L.push('출처 전반: ' + (d.sources ? (d.sources === 'ok' ? '적절' : '보완 필요') : '(미판정)') + (d.sources_opinion ? ' | 추가 권장: ' + d.sources_opinion : ''));
+    var badSrc = [];
+    SOURCES.forEach(function (s, i) { if (d['src' + i] === 'bad') badSrc.push(s[0]); });
+    if (badSrc.length) L.push('부적절·대체 표시 출처: ' + badSrc.join(' / '));
+    if (d.final_opinion) { L.push(''); L.push('종합 의견: ' + d.final_opinion); }
+    L.push('');
+    L.push('검토 확인: ' + (d.confirmed ? '완료 (체크됨)' : '미완료'));
+    return L.join('\n');
+  }
+
+  document.getElementById('btnCopy').addEventListener('click', function () {
+    var text = summarize();
+    var btn = this;
+    function ok() { btn.textContent = '복사 완료!'; setTimeout(function () { btn.textContent = '결과 복사'; }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, function () { fallbackCopy(text); ok(); });
+    } else { fallbackCopy(text); ok(); }
+  });
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  document.getElementById('btnMail').addEventListener('click', function () {
+    var subject = '[가나디야 KB v1 수의사 검수 결과]';
+    var url = 'mailto:joo24587@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(summarize());
+    window.location.href = url;
+  });
+
+  document.getElementById('btnPrint').addEventListener('click', function () { window.print(); });
+
+  document.addEventListener('input', queueSave);
+  document.addEventListener('change', function () { refresh(); queueSave(); });
+
+  restore();
+  refresh();
+  window.__kbSummary = summarize;
+})();
+</script>
+
+</body>
+</html>
