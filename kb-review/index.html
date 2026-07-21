@@ -223,10 +223,8 @@
   <h1>가나디야 지식베이스(KB) v1<br/>수의사 검수 패킷</h1>
   <p class="small muted" style="margin-top:8px">버전 v1 (검수 전 초안, reviewed = false) · 작성일 2026-07-18</p>
   <div class="callout">
-    <b>⚠ 수의사 검수 전 초안입니다.</b> 이 문서의 규칙·임계값은 1차 수의영양학 문헌을 근거로 정리한
-    초안이며, 아직 수의사의 검수를 받지 않았습니다. 실제 서비스 반영 전 반드시 수의영양 전문가의
-    확인을 거칩니다 — 이 문서가 그 절차입니다. <b>화면에서 바로 체크·기입하실 수 있고, 내용은 이
-    브라우저에 자동 저장됩니다.</b> 마치신 뒤 상단의 "결과 요약 복사"로 보내 주시면 됩니다.
+    <b>⚠ 아직 수의사 검수를 받지 않은 초안입니다.</b> 각 규칙을 검토해 주세요. 입력하면 바로 저장되며,
+    마치신 뒤 상단 "제출하기"를 눌러 주시면 됩니다.
   </div>
 </section>
 
@@ -234,62 +232,28 @@
 <section>
   <div class="eyebrow">About</div>
   <h2>가나디야는 어떤 서비스인가</h2>
-  <p>가나디야는 <b>알러지·건강 상태가 있는 반려견을 위한 맞춤 화식(자연식) 추천·정기배송 서비스</b>입니다.
-  보호자가 아이의 상태(알러지, 병력, 체중 등)를 등록하면, 수의영양학 문헌을 참고해 만든
-  <b>지식베이스(KB) 규칙</b>이 화식 제품을 <b>적합 / 주의 / 제외</b>로 판별해 추천하고, 맞는 식단을
-  정기배송으로 꾸준히 공급합니다. 급여 후 반응(기호성·배변·피부)을 기록해 다음 추천에 참고하는
-  관찰 루프도 함께 제공합니다.</p>
+  <p>알러지·건강 상태가 있는 반려견에게 <b>수의영양 문헌 기준으로 맞는 화식을 추천·정기배송</b>하는
+  서비스입니다. 이 추천에 쓰이는 <b>지식베이스(KB) 규칙 6개</b>가 검수 대상입니다. (진단·처방은 하지
+  않으며, 중증 상태는 수의사 상담을 먼저 안내합니다.)</p>
   <div class="flow" aria-label="서비스 흐름">
     <span class="step">상태 등록</span><span class="arr">→</span>
-    <span class="step">문헌 기반 판별·추천</span><span class="arr">→</span>
+    <span class="step">문헌 기반 추천</span><span class="arr">→</span>
     <span class="step">화식 정기배송</span><span class="arr">→</span>
     <span class="step">급여 반응 기록</span><span class="arr">→</span>
     <span class="step">재추천</span>
   </div>
-  <p class="small muted">서비스는 <b>진단·처방을 하지 않습니다</b>(사료관리법 준수). 중증 상태는 추천 대신
-  수의사 상담을 먼저 안내합니다. <b>이 판별에 쓰이는 KB 규칙 6개의 임계값·근거가 본 검수의 대상입니다.</b></p>
-
-  <h3>이 서비스가 하는 것 / 하지 않는 것</h3>
-  <div class="tbl-wrap"><table>
-    <tr><th style="width:50%">하는 것</th><th>하지 않는 것</th></tr>
-    <tr><td>입력된 상태에 따라 제품의 <b>특정 영양소가 평소보다 높은지/낮은지 관찰·안내</b></td><td>질병의 <b>진단·치료·예방</b> (표방 금지)</td></tr>
-    <tr><td>기능 언어로만 안내 — 예: "지방 함량 확인이 필요한 프로파일이에요"</td><td>병명·효능·완치·처방 표현</td></tr>
-    <tr><td>중증·위험신호는 추천 대신 <b>수의사 상담 연계</b></td><td>원료를 질환 근거로 일괄 배제 (회피 원료는 보호자 입력에서만)</td></tr>
-  </table></div>
 </section>
 
 <!-- ══ 검수 안내 ══ -->
 <section>
   <div class="eyebrow">Your Role</div>
-  <h2>검수자(원장님)의 역할</h2>
-  <p>이 검수는 완벽한 판정을 만드는 작업이 아닙니다. 검수자는 <b>"우리가 낸 답에서 잘못된 것을
-  지적해주는 전문가·자문역"</b>입니다. 각 규칙에 대해 셋 중 하나만 선택해 주시면 됩니다 —
-  <b>승인</b>(그대로 사용 가능) / <b>수정 필요</b>(수정값 기재) / <b>삭제 권고</b>(규칙 제외).</p>
-  <p class="small muted">각 규칙은 <b>제목만 먼저</b> 보입니다. <b>"상세보기"</b>를 누르면 임계값과 근거
-  문헌이 나오니, 확인 후 승인·수정·삭제를 선택해 주세요.</p>
-  <p class="small muted">검수 결과는 규칙의 <b>임계값(DM%)·방향·라벨</b>에 반영되고, 추천 엔진이
-  제품을 caution(주의)/exclude(제외)로 판정하는 기준이 됩니다.</p>
-
-  <h3>엔진이 규칙을 적용하는 방식</h3>
-  <p class="small">제품 영양소는 수분 포함 <b>as-fed(급여 상태)</b>%로 표기되어, 수분 제거
-  <b>DM(건물기준)</b>%로 환산한 뒤 임계값과 비교합니다. 임계값도 제품값도 모두 DM 기준이라 수분
-  함량 차이(화식 ↔ 건사료)에 흔들리지 않습니다.</p>
-  <div class="quote mono" style="text-align:center">DM% = as-fed% ÷ ( (100 − 수분%) / 100 )</div>
-  <p class="small">DM 환산값이 <b>exclude 임계 이상</b>이면 제외, 아니고 <b>caution 임계 이상</b>이면
-  주의, 둘 다 미만이면 적합입니다. 수치가 <b>없으면</b> 판정 불가로 보고 무조건 주의로 격상합니다
-  ("모르면 회피 유지"). 판정은 적합 → 주의 → 제외 <b>단방향 격상</b>만 가능합니다.</p>
-  <details>
-    <summary>DM 환산 예시 보기</summary>
-    <p class="xs">저지방 화식이 지방 as-fed 3% · 수분 75%라면 → 3 ÷ ((100−75)/100) = 3 ÷ 0.25 =
-    <b>12.0 DM%</b>. 췌장염 이력 규칙(caution ≥ 15 / exclude ≥ 25) 적용 시 12.0 &lt; 15 → <b>적합</b>.
-    (라벨의 3%가 아니라 환산한 12%를 임계값과 비교합니다.)</p>
-  </details>
-  <div class="callout">
-    <b>vet-first 게이트:</b> 프로필에 <b>신장·심장·간·당뇨</b>(중증 4종) 조건이 있으면 엔진은 추천 목록을
-    내지 않고 수의사 상담 안내로 라우팅합니다. 아래 R-4·R-5·R-6은 현재 이 게이트 뒤에 있어, 임계값이
-    바로 쓰이기보다 게이트가 풀리거나 정책이 바뀔 때를 대비한 규칙입니다. 그래도 값의 임상 타당성
-    확인이 필요합니다.
-  </div>
+  <h2>검수자의 역할</h2>
+  <p>각 규칙을 검토하고 <b>승인 / 수정 필요 / 삭제 권고</b> 중 하나를 선택해 주세요. 완벽한 판정이
+  아니라 <b>잘못된 부분을 지적</b>해 주시면 됩니다. 결과는 규칙의 임계값·라벨에 반영됩니다.</p>
+  <p class="small muted">임계값은 제품의 수분을 뺀 <b>건물기준(DM%)</b>과 비교합니다
+  (<span class="mono">DM% = as-fed% ÷ ((100−수분%)/100)</span>). 값이 임계값을 넘으면 주의·제외로 안내됩니다.
+  <b>신장·심장·당뇨(중증)</b>는 추천 대신 수의사 상담으로 안내되어 R-4~R-6은 참고용이지만, 값의 임상
+  타당성은 확인이 필요합니다.</p>
 </section>
 
 <!-- ══ R-1 ══ -->
@@ -781,30 +745,13 @@
   document.addEventListener('input', queueSave);
   document.addEventListener('change', function () { refresh(); queueSave(); });
 
-  // 모바일 가독성: 규칙 카드는 제목·판정만 먼저 보이고, 세부(영양소·임계값·근거)는 '상세보기'로 접는다.
-  document.querySelectorAll('section[data-rule]').forEach(function (sec) {
-    var kv = sec.querySelector('.kv');
-    // 트리거·화면 문구 행 제거(검수자에겐 불필요)
-    if (kv) {
-      var kids = Array.from(kv.children);
-      for (var i = 0; i < kids.length; i += 2) {
-        var label = (kids[i].textContent || '').trim();
-        if (label === '트리거' || label === '화면 문구') { kids[i].remove(); kids[i + 1].remove(); }
-      }
+  // 규칙 카드: 트리거·화면 문구 행만 제거(검수자에겐 불필요). 세부는 펼친 상태로 표시.
+  document.querySelectorAll('section[data-rule] .kv').forEach(function (kv) {
+    var kids = Array.from(kv.children);
+    for (var i = 0; i < kids.length; i += 2) {
+      var label = (kids[i].textContent || '').trim();
+      if (label === '트리거' || label === '화면 문구') { kids[i].remove(); kids[i + 1].remove(); }
     }
-    var quote = sec.querySelector('.quote');
-    var src = sec.querySelector('.src');
-    var anchor = kv || quote;
-    if (!anchor) return;
-    var det = document.createElement('details');
-    det.className = 'evidence';
-    var sum = document.createElement('summary');
-    sum.textContent = '상세보기 (임계값·근거)';
-    det.appendChild(sum);
-    anchor.parentNode.insertBefore(det, anchor);
-    if (kv) det.appendChild(kv);
-    if (quote) det.appendChild(quote);
-    if (src) det.appendChild(src);
   });
   // 출처 12건 개별 검토는 접힘(전반 판정은 밖에 유지)
   (function () {
