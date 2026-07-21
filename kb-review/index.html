@@ -128,6 +128,14 @@
   .evidence > summary { color: var(--green-deep); }
   .evidence[open] { padding-bottom: 12px; }
   .evidence .quote { margin-top: 8px; }
+  /* 규칙 표면: 임계값 한 줄 + 근거 핵심 한 줄 */
+  .threshold {
+    font-size: 14.5px; font-weight: 700; color: var(--ink);
+    margin: 12px 0 6px; padding: 8px 12px;
+    background: var(--green-soft); border-radius: 8px;
+  }
+  .threshold .placeholder { color: var(--danger); }
+  .gist { font-size: 13px; color: var(--muted); line-height: 1.65; margin: 0 2px 4px; }
   .src { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; padding-left: 18px; }
   .src li { margin-bottom: 3px; }
 
@@ -489,25 +497,6 @@
   </details>
 </section>
 
-<!-- ══ 문구 정책 ══ -->
-<section>
-  <div class="eyebrow">Copy Policy</div>
-  <h2>문구 정책 (문구 관점 의견)</h2>
-  <p class="small">치료·예방·완치·처방·진단·병명·효능 표현은 <b>전면 금지</b>이며 릴리스 전 자동 스캔이
-  차단합니다. 모든 사용자 대면 문구는 단일 문구 사전에서만 생성되고, <b>추천 이유는 질환명을 절대 참조하지
-  않습니다</b>(신장 규칙도 화면엔 "인 함량 확인이 필요한 프로파일이에요"만 표기). 모든 관련 화면에
-  <b>"정확한 진단과 처방은 수의사와 상담하세요"</b>를 상시 병기하고, 위험 신호·중증 조건은 AI 출력과 무관하게
-  서버가 강제로 수의사 상담 우선으로 처리합니다.</p>
-  <div class="verdict">
-    <div class="verdict-label">판정</div>
-    <div class="seg" data-verdict="copy">
-      <label><input type="radio" name="copy" value="ok"/>문구 정책 적절</label>
-      <label><input type="radio" name="copy" value="fix"/>수정 의견 있음</label>
-    </div>
-    <textarea data-k="copy_opinion" placeholder="문구 관련 의견 (선택)"></textarea>
-  </div>
-</section>
-
 <!-- ══ 출처 적정성 ══ -->
 <section>
   <div class="eyebrow">Sources</div>
@@ -521,8 +510,10 @@
       <label><input type="radio" name="sources" value="ok"/>근거 자료로 적절</label>
       <label><input type="radio" name="sources" value="fix"/>보완 필요</label>
     </div>
-    <textarea data-k="sources_opinion" placeholder="추가로 참조를 권하는 표준 자료 (예: NRC 2006, AAFCO, 한국 사료표준 등)"></textarea>
   </div>
+  <h3>추가로 참고하면 좋을 자료·정보</h3>
+  <p class="small muted">더 나은 기준·문헌·가이드라인·데이터, 또는 검수에 참고할 조언이 있으면 자유롭게 적어 주세요.</p>
+  <textarea data-k="sources_opinion" placeholder="예: NRC 2006, AAFCO, 한국 사료표준, 최신 논문, 실무 조언 등"></textarea>
 </section>
 
 <!-- ══ 확인서 ══ -->
@@ -539,7 +530,7 @@
   </div>
   <label class="confirm-check">
     <input type="checkbox" id="confirm" data-k="confirmed"/>
-    본인은 상기 규칙(R-1~R-6), DM% 환산 가정, 문구 정책, 참고 문헌을 검토하였으며 각 항목에 의견을 표기하였습니다.
+    본인은 상기 규칙(R-1~R-6), DM% 환산 가정, 참고 문헌을 검토하였으며 각 항목에 의견을 표기하였습니다.
   </label>
   <div class="done-banner" id="doneBanner">모든 판정이 완료되었습니다. 상단의 "제출하기"를 눌러 보내 주세요. 감사합니다.</div>
   <div class="done-banner" id="submitBanner" role="status"></div>
@@ -639,7 +630,7 @@
     });
   }
 
-  var PROGRESS_KEYS = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'copy', 'sources'];
+  var PROGRESS_KEYS = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'sources'];
   function refresh() {
     refreshFixFields();
     var done = 0;
@@ -647,8 +638,8 @@
       if (document.querySelector('input[name="' + k + '"]:checked')) done++;
     });
     if (document.getElementById('confirm').checked) done++;
-    document.getElementById('progress').textContent = '판정 ' + done + ' / 9';
-    document.getElementById('doneBanner').classList.toggle('show', done === 9);
+    document.getElementById('progress').textContent = '판정 ' + done + ' / 8';
+    document.getElementById('doneBanner').classList.toggle('show', done === 8);
   }
 
   var V_LABEL = { approve: '승인', fix: '수정 필요', delete: '삭제 권고', include: '포함', exclude: '미포함 유지', other: '기타', ok: '적절', bad: '부적절·대체' };
@@ -680,8 +671,8 @@
     });
     var p = d.r3p;
     if (p) L.push('R-3 추가(단백질 반대규칙): ' + (V_LABEL[p] || p) + (p === 'include' && d.r3p_value ? ' (protein DM% < ' + d.r3p_value + ')' : ''));
-    L.push('문구 정책: ' + (d.copy ? (d.copy === 'ok' ? '적절' : '수정 의견 있음') : '(미판정)') + (d.copy_opinion ? ' | ' + d.copy_opinion : ''));
-    L.push('출처 전반: ' + (d.sources ? (d.sources === 'ok' ? '적절' : '보완 필요') : '(미판정)') + (d.sources_opinion ? ' | 추가 권장: ' + d.sources_opinion : ''));
+    L.push('출처 전반: ' + (d.sources ? (d.sources === 'ok' ? '적절' : '보완 필요') : '(미판정)'));
+    if (d.sources_opinion) L.push('추가 참고 자료·정보: ' + d.sources_opinion);
     var badSrc = [];
     SOURCES.forEach(function (s, i) { if (d['src' + i] === 'bad') badSrc.push(s[0]); });
     if (badSrc.length) L.push('부적절·대체 표시 출처: ' + badSrc.join(' / '));
@@ -745,12 +736,42 @@
   document.addEventListener('input', queueSave);
   document.addEventListener('change', function () { refresh(); queueSave(); });
 
-  // 규칙 카드: 트리거·화면 문구 행만 제거(검수자에겐 불필요). 세부는 펼친 상태로 표시.
-  document.querySelectorAll('section[data-rule] .kv').forEach(function (kv) {
-    var kids = Array.from(kv.children);
-    for (var i = 0; i < kids.length; i += 2) {
-      var label = (kids[i].textContent || '').trim();
-      if (label === '트리거' || label === '화면 문구') { kids[i].remove(); kids[i + 1].remove(); }
+  // 규칙 카드: 임계값 한 줄 + 근거 핵심 한 줄을 표면에, 긴 원문·출처는 '근거 원문·출처 보기'로 접기.
+  var RULE_BRIEF = {
+    r1: { th: '지방 초과 시 주의 · caution ≥ 15 / exclude ≥ 25 %DM', gist: '저지방 위장관식이 표준이나 재발 방지 근거는 미확립 → 보수적 관찰값으로 완화 제시.' },
+    r2: { th: '지방 초과 시 주의 · caution ≥ 20 / exclude ≥ 30 %DM', gist: '만성 장병증에 저~중지방이 표준. PLE(중증) 기준을 완화해 일반 소화 예민용으로 제시.' },
+    r3: { th: '지방 초과 시 주의 · caution ≥ 15 / exclude ≥ 25 %DM', gist: '비만견 메타분석의 저지방 최적치(<10% DM)를 과도한 flag를 피해 보수적으로 완화.' },
+    r4: { th: '인(P) 초과 시 주의 · caution ≥ 0.5 / exclude ≥ 1.0 %DM <span class="placeholder">(잠정)</span>', gist: 'IRIS는 혈장 인 목표치만 제시 → 사료 %DM 값은 임상 통념 기반 잠정치. 최우선 확정 필요.' },
+    r5: { th: '나트륨 초과 시 주의 · caution ≥ 0.3 / exclude ≥ 0.5 %DM', gist: 'Merck의 mg/100kcal 기준을 DM%로 환산한 가정값. ACVIM은 방향성만 일치(정량 없음).' },
+    r6: { th: '지방 초과 시 주의 · caution ≥ 20 / exclude 없음 <span class="placeholder">(연성)</span>', gist: 'AAHA는 일관된 급여를 우선하고 저지방은 정성적 권고 → exclude 없는 연성 규칙.' }
+  };
+  document.querySelectorAll('section[data-rule]').forEach(function (sec) {
+    var brief = RULE_BRIEF[sec.dataset.rule];
+    var kv = sec.querySelector('.kv');
+    var quote = sec.querySelector('.quote');
+    var src = sec.querySelector('.src');
+    var anchor = kv || quote;
+    if (!anchor) return;
+    if (brief) {
+      var th = document.createElement('p');
+      th.className = 'threshold';
+      th.innerHTML = brief.th;
+      var gist = document.createElement('p');
+      gist.className = 'gist';
+      gist.textContent = brief.gist;
+      anchor.parentNode.insertBefore(th, anchor);
+      anchor.parentNode.insertBefore(gist, anchor);
+    }
+    if (kv) kv.remove(); // 임계값은 threshold 한 줄로 대체
+    if (quote) {
+      var det = document.createElement('details');
+      det.className = 'evidence';
+      var sum = document.createElement('summary');
+      sum.textContent = '근거 원문·출처 보기';
+      det.appendChild(sum);
+      quote.parentNode.insertBefore(det, quote);
+      det.appendChild(quote);
+      if (src) det.appendChild(src);
     }
   });
   // 출처 12건 개별 검토는 접힘(전반 판정은 밖에 유지)
