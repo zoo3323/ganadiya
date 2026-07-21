@@ -182,6 +182,7 @@
     color: var(--green-deep); font-weight: 700; font-size: 14px;
   }
   .done-banner.show { display: block; }
+  .done-banner.error { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
   .notice { font-size: 12px; color: var(--muted); margin-top: 10px; }
 
   @media print {
@@ -200,7 +201,7 @@
   <div class="toolbar-inner">
     <span class="progress-pill" id="progress">판정 0 / 9</span>
     <span class="save-state" id="saveState">입력하면 이 브라우저에 자동 저장됩니다</span>
-    <button type="button" class="primary" id="btnMail">검수 결과 메일로 보내기</button>
+    <button type="button" class="primary" id="btnSubmit">제출하기</button>
     <button type="button" id="btnCopy">결과 복사</button>
     <button type="button" id="btnPrint">인쇄</button>
   </div>
@@ -566,10 +567,11 @@
     <input type="checkbox" id="confirm" data-k="confirmed"/>
     본인은 상기 규칙(R-1~R-6), DM% 환산 가정, 문구 정책, 참고 문헌을 검토하였으며 각 항목에 의견을 표기하였습니다.
   </label>
-  <div class="done-banner" id="doneBanner">모든 판정이 완료되었습니다. 상단의 "검수 결과 메일로 보내기"를 눌러 보내 주세요. 감사합니다.</div>
-  <p class="notice">"검수 결과 메일로 보내기"를 누르면 작성 내용이 담긴 메일이 열립니다 — 검수자님이
-  <b>보내기 버튼을 눌러야 실제로 전송</b>됩니다(작성 중 내용은 이 브라우저에만 저장됩니다). 내용이 길어
-  메일에서 잘리면 "결과 복사"로 붙여넣어 보내 주셔도 됩니다. 서면 서명본이 필요하면 "인쇄"로 출력할 수 있습니다.</p>
+  <div class="done-banner" id="doneBanner">모든 판정이 완료되었습니다. 상단의 "제출하기"를 눌러 보내 주세요. 감사합니다.</div>
+  <div class="done-banner" id="submitBanner" role="status"></div>
+  <p class="notice"><b>"제출하기"</b>를 누르면 작성 내용이 가나디야로 <b>바로 전송·저장</b>됩니다(작성 중 내용은
+  이 브라우저에도 자동 저장됩니다). 전송이 안 되면 "결과 복사"로 붙여넣어 보내 주셔도 됩니다. 서면 서명본이
+  필요하면 "인쇄"로 출력할 수 있습니다.</p>
 </section>
 
 <p class="xs muted" style="text-align:center; padding-bottom:8px">가나디야 (김남주) · KB v1 검수 패킷 · 원본 데이터: kb_rules.json / KB-RESEARCH.md</p>
@@ -730,10 +732,38 @@
     document.body.removeChild(ta);
   }
 
-  document.getElementById('btnMail').addEventListener('click', function () {
-    var subject = '[가나디야 KB v1 수의사 검수 결과]';
-    var url = 'mailto:joo24587@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(summarize());
-    window.location.href = url;
+  var SUPA_URL = 'https://hfihalcqtqoqdflfbgzr.supabase.co';
+  var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmaWhhbGNxdHFvcWRmbGZiZ3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MjU3MTUsImV4cCI6MjA5OTIwMTcxNX0.N_zaLst0gOolfv5zTb726pqe1QJ9fmMtKWIgGrT08t0';
+
+  function showSubmitBanner(msg, ok) {
+    var b = document.getElementById('submitBanner');
+    b.textContent = msg;
+    b.className = 'done-banner show' + (ok ? '' : ' error');
+  }
+
+  document.getElementById('btnSubmit').addEventListener('click', function () {
+    var btn = this;
+    var d = collect();
+    btn.disabled = true;
+    btn.textContent = '제출 중…';
+    fetch(SUPA_URL + '/rest/v1/kb_review_submissions', {
+      method: 'POST',
+      headers: {
+        apikey: SUPA_ANON,
+        Authorization: 'Bearer ' + SUPA_ANON,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ reviewer_name: d.name || null, reviewer_org: d.org || null, payload: { data: d, summary: summarize() } })
+    }).then(function (res) {
+      if (!res.ok) throw new Error('status ' + res.status);
+      btn.textContent = '제출 완료 ✓';
+      showSubmitBanner('제출이 완료되었습니다. 가나디야로 전송되었어요. 감사합니다.', true);
+    }).catch(function () {
+      btn.disabled = false;
+      btn.textContent = '제출하기';
+      showSubmitBanner('전송에 실패했어요. 인터넷 연결을 확인해 다시 누르거나, "결과 복사"로 붙여넣어 보내 주세요.', false);
+    });
   });
 
   document.getElementById('btnPrint').addEventListener('click', function () { window.print(); });
