@@ -265,8 +265,8 @@
   <p>이 검수는 완벽한 판정을 만드는 작업이 아닙니다. 검수자는 <b>"우리가 낸 답에서 잘못된 것을
   지적해주는 전문가·자문역"</b>입니다. 각 규칙에 대해 셋 중 하나만 선택해 주시면 됩니다 —
   <b>승인</b>(그대로 사용 가능) / <b>수정 필요</b>(수정값 기재) / <b>삭제 권고</b>(규칙 제외).</p>
-  <p class="small muted">각 규칙은 <b>임계값과 화면 문구만 먼저</b> 보이고, 자세한 <b>근거 문헌은
-  "근거 문헌 보기"를 펼치면</b> 됩니다. 임계값만 보고 바로 판정하셔도 됩니다.</p>
+  <p class="small muted">각 규칙은 <b>제목만 먼저</b> 보입니다. <b>"상세보기"</b>를 누르면 임계값과 근거
+  문헌이 나오니, 확인 후 승인·수정·삭제를 선택해 주세요.</p>
   <p class="small muted">검수 결과는 규칙의 <b>임계값(DM%)·방향·라벨</b>에 반영되고, 추천 엔진이
   제품을 caution(주의)/exclude(제외)로 판정하는 기준이 됩니다.</p>
 
@@ -781,18 +781,29 @@
   document.addEventListener('input', queueSave);
   document.addEventListener('change', function () { refresh(); queueSave(); });
 
-  // 모바일 가독성: 규칙별 근거 인용·출처를 기본 접힘으로 이동(판정 컨트롤만 먼저 보이게)
+  // 모바일 가독성: 규칙 카드는 제목·판정만 먼저 보이고, 세부(영양소·임계값·근거)는 '상세보기'로 접는다.
   document.querySelectorAll('section[data-rule]').forEach(function (sec) {
+    var kv = sec.querySelector('.kv');
+    // 트리거·화면 문구 행 제거(검수자에겐 불필요)
+    if (kv) {
+      var kids = Array.from(kv.children);
+      for (var i = 0; i < kids.length; i += 2) {
+        var label = (kids[i].textContent || '').trim();
+        if (label === '트리거' || label === '화면 문구') { kids[i].remove(); kids[i + 1].remove(); }
+      }
+    }
     var quote = sec.querySelector('.quote');
-    if (!quote) return;
     var src = sec.querySelector('.src');
+    var anchor = kv || quote;
+    if (!anchor) return;
     var det = document.createElement('details');
     det.className = 'evidence';
     var sum = document.createElement('summary');
-    sum.textContent = '근거 문헌 보기';
+    sum.textContent = '상세보기 (임계값·근거)';
     det.appendChild(sum);
-    quote.parentNode.insertBefore(det, quote);
-    det.appendChild(quote);
+    anchor.parentNode.insertBefore(det, anchor);
+    if (kv) det.appendChild(kv);
+    if (quote) det.appendChild(quote);
     if (src) det.appendChild(src);
   });
   // 출처 12건 개별 검토는 접힘(전반 판정은 밖에 유지)
